@@ -124,7 +124,7 @@ of them as a group.
 This essentially mean that with a new deck the state can be described as 13 card numbers have 4 cards left in the deck.
 Upon the first draw while there is a 4/52 chance that we draw a losing card but there is a 48/54 chance that the state 
 becomes 12 card numbers have 4 cards left in the deck and 1 card number has 3 cards left in the deck.
-We step through all the  different card numbers that have cards left and do this. This as you can see consolidated the 
+We step through all the  different amounts that have at least one card number and do this. This as you can see consolidated the 
 calculations we have to do going forward from 12 states to 1 and that is just on the first step.
 
 So the method for this is we step through each possible state we describe the state like above and we also keep track of
