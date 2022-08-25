@@ -72,7 +72,7 @@ class Memories(Strategy):
         return bool(self.seen[4])
 
     @staticmethod
-    def solve(state=(12, 1, 0, 0, 0)):
+    def solve(state=(13, 0, 0, 0, 0)):
         wins = 0.
         n = sum([x * (4 - i) for x, i in zip(state, range(len(state)))])
         fringe = {n: {state: 1.}, }
@@ -121,36 +121,30 @@ def monte_carlo(strategy, tries):
         else:
             count += 1
     return count/tries
+def sim(strat, tries, batches):
+    print()
+    print(batches, "batches of:", tries, "attempts using strategy", strat)
+    now = time.time()
+    r = []
+    for _ in range(batches):
+        print("{:3.3f}% done".format(_ / batches * 100), end="\r")
+        r.append(monte_carlo(strat, tries))
+    print("Total time: {:6.3f}s".format(time.time() - now))
+    stdv = statistics.stdev(r)
+    ci95 = 1.96 * stdv / (batches ** 0.5)
+    mean = statistics.mean(r)
+    print("there is a 95% chance that the mean is between {:3.6f}% and {:3.6f}%".format(
+        (mean - ci95) * 100, (mean + ci95) * 100))
+
 
 def main():
 
     tries = 10000
     batches = 4000
-    for strat in [Memories, Random_guess]:
-
-        now = time.time()
-        print("Exact answer calculated to be: {:3.6f}%".format(strat.solve((12, 1, 0, 0, 0)) * 100))
-        print("Total time: {:6.3f}s".format(time.time()-now))
-        continue
-        #now = time.time()
-        #print("attempts using strategy", strat)
-        #print("Exact answer calculated to be: {:3.6f}%".format(strat.solve() * 100))
-        #print("Total time: {:6.3f}s".format(time.time() - now))
-        #continue
-        print()
-        print(batches, "batches of:", tries, "attempts using strategy", strat)
-        now = time.time()
-        r = []
-        for _ in range(batches):
-            print("{:3.3f}% done".format(_/batches * 100), end="\r")
-            r.append(monte_carlo(strat, tries))
-        print("Total time: {:6.3f}s".format(time.time()-now))
-        stdv = statistics.stdev(r)
-        ci95 = 1.96 * stdv / (batches ** 0.5)
-        mean = statistics.mean(r)
-        print("there is a 95% chance that the mean is between {:3.6f}% and {:3.6f}%".format(
-            (mean - ci95) * 100, (mean + ci95) * 100))
-
+    for strat in [Memories, Random_guess, Say_what_you_see]:
+        #sim(strat, tries, batches)
+        if strat == Say_what_you_see:
+            continue
         now = time.time()
         print("Exact answer calculated to be: {:3.6f}%".format(strat.solve() * 100))
         print("Total time: {:6.3f}s".format(time.time()-now))
