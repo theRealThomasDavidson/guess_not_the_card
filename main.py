@@ -1,11 +1,24 @@
 import random
 import statistics
 import time
+
+
 class Strategy:
     def next_guess(self):
+        """
+        this will give the guess of what the next card is not.
+        :return: this will return an int that is a representation of the next guess this number will be between 0 and
+            the number of varieties - 1
+        """
         return 
 
     def response(self, card):
+        """
+        This method informs the strategy player of the card that was last seen you tell it the variety of the card and
+            it updates it priors about the rest of the deck according to it's strategy
+        :param card: this is an int that corresponds to the variety of the last seen card
+        :return: None
+        """
         return
 
     def solved(self):
@@ -13,7 +26,11 @@ class Strategy:
         this should tell when your deck is solved perfectly for the rest of it
         return is a bool if it is true then it is solved false for needs to keep running
         """
-        return 
+        return
+
+    @classmethod
+    def solve(cls, state):
+        return
 
 
 class Say_what_you_see(Strategy):
@@ -42,10 +59,18 @@ class Random_guess(Strategy):
     def solved(self):
         return False
 
-    @staticmethod
-    def solve(state=(13, 0, 0, 0, 0)):
+    @classmethod
+    def solve(cls, state=(13, 0, 0, 0, 0)):
+        """
+        this method will give an exact solution to the chances of winning using the Random Guess strategy
+        :param state: this is a tuple or list of the form (int,...) or [int,...] where the ints show how many varieties
+            have any particular amount of instances of that variety type left. The amount left is shown by position with
+            the number of remaining instances being equal to length - 1 - index.
+        :return: a float between 0. and 1. that gives the proportion of wins to games played.
+        """
+        colors = float(sum(state))
         n = sum([x * (4 - i) for x, i in zip(state, range(len(state)))])
-        return (12. / 13.) ** n
+        return ((colors - 1.) / colors) ** n
 
 
 class Memories(Strategy):
@@ -59,7 +84,7 @@ class Memories(Strategy):
         return random.choice(tuple(self.seen[self.seenidx]))
 
     def response(self, card):
-        if not isinstance(card, (int, str)):
+        if not isinstance(card, (int,)):
             raise TypeError("U R SO DUMB")
 
         for ndx in range(self.seenidx + 1):
@@ -71,20 +96,27 @@ class Memories(Strategy):
     def solved(self):
         return bool(self.seen[4])
 
-    @staticmethod
-    def solve(state=(13, 0, 0, 0, 0)):
+    @classmethod
+    def solve(cls, state=(13, 0, 0, 0, 0)):
+        """
+        this method will give an exact solution to the chances of winning using the Memories strategy
+        :param state: this is a tuple or list of the form (int,...) or [int,...] where the ints show how many varieties
+            have any particular amount of instances of that variety type left. The amount left is shown by position with
+            the number of remaining instances being equal to length - 1 - index. 
+        :return: a float between 0. and 1. that gives the proportion of wins to games played.
+        """
+        colors = sum(state)
         wins = 0.
         n = sum([x * (4 - i) for x, i in zip(state, range(len(state)))])
         fringe = {n: {state: 1.}, }
         while fringe[n]:
-            lwins = wins
             fringe[n - 1] = {}
             for state in fringe[n]:
                 prop = fringe[n][state]
-                if state[4]:
+                if state[-1]:
                     wins += prop
                     continue
-                poss = 12
+                poss = colors - 1
                 for ndx in range(len(state)):
                     tpos = min(poss, state[ndx])
                     if not tpos:
@@ -95,7 +127,6 @@ class Memories(Strategy):
                         fringe[n - 1][nstate] = 0.
                     fringe[n - 1][nstate] += nprop
                     poss -= tpos
-            #print(n, wins - lwins, "\t",  len(fringe[n]))
             del fringe[n]
             n -= 1
         for state in fringe[n]:
@@ -121,9 +152,20 @@ def monte_carlo(strategy, tries):
         else:
             count += 1
     return count/tries
+
+
 def sim(strat, tries, batches):
-    print()
-    print(batches, "batches of:", tries, "attempts using strategy", strat)
+    """
+    This is a housing for a monte carlo simulation that plays a Strategy inhereted class and prints statistical
+        information about it.
+    :param strat: this is an inherited class from Strategy that implements at least next_guess, responce, and solved.
+        this class will define that strategy for playing the game
+    :param tries: this is an int that is the number of games simulated for each batch
+    :param batches: this is an int that is the number of batches that we will take averages of and we give statistical
+        information about what we think the mean of the proportion of wins with this strategy.
+    :return: None this will however print to output statistical information of how the
+    """
+    print("{} batches of: {} attempts using strategy {}.".format(batches, tries, strat.__name__))
     now = time.time()
     r = []
     for _ in range(batches):
@@ -139,10 +181,10 @@ def sim(strat, tries, batches):
 
 def main():
 
-    tries = 10000
-    batches = 4000
+    tries = 1000
+    batches = 400
     for strat in [Memories, Random_guess, Say_what_you_see]:
-        #sim(strat, tries, batches)
+        sim(strat, tries, batches)
         if strat == Say_what_you_see:
             continue
         now = time.time()
