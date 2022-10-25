@@ -1,5 +1,6 @@
      ::image:: https://github.com/theRealThomasDavidson/guess_not_the_card/workflows/test/badge.svg?branch=main
-     :target: https://github.com/theRealThomasDavidson/guess_not_the_card/actions?workflow=test:alt: CI Status
+     :target: https://github.com/theRealThomasDavidson/guess_not_the_card/actions?workflow=test
+     :alt: CI Status
 
 
 # Guess Not The Card
