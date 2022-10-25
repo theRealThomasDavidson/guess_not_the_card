@@ -181,8 +181,8 @@ def sim(strat, tries, batches):
 
 def main():
 
-    tries = 1000
-    batches = 400
+    tries = 10000
+    batches = 4000
     for strat in [Memories, Random_guess, Say_what_you_see]:
         sim(strat, tries, batches)
         if strat == Say_what_you_see:
