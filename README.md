@@ -1,3 +1,8 @@
+     :image:: https://github.com/theRealThomasDavidson/guess_not_the_card/workflows/CI/badge.svg?branch=main
+     :target: https://github.com/theRealThomasDavidson/guess_not_the_card/actions?workflow=CI
+     :alt: CI Status
+
+
 # Guess Not The Card
 
 This whole little project started as response to a 
