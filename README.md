@@ -3,7 +3,7 @@
 # Guess Not The Card
 
 This whole little project started as response to a 
-[youtube video from Scam Nation (a majic and puzzle youtube channel)](https://www.youtube.com/watch?v=Pkp51MZUD3Q&t=1s).
+[youtube video from Scam Nation (a magic and puzzle youtube channel)](https://www.youtube.com/watch?v=Pkp51MZUD3Q&t=1s).
 In that video there was a puzzle/challenge to guess a card number(including jacks queens kings), afterward you would 
 check the first card on top of a deck of cards without replacement. If the guessed card had the same number as the 
 checked card then the game is lost, if the guessed card is different from the checked card then you get the chance to 
