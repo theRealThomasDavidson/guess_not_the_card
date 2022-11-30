@@ -107,7 +107,7 @@ class Memories(Strategy):
         """
         colors = sum(state)
         wins = 0.
-        n = sum([x * ((len(state)-1) - i) for x, i in zip(state, range(len(state)))])
+        n = sum([x * ((len(state) - 1) - i) for x, i in zip(state, range(len(state)))])
         fringe = {n: {state: 1.}, }
         while fringe[n]:
             fringe[n - 1] = {}
@@ -121,7 +121,7 @@ class Memories(Strategy):
                     tpos = min(poss, state[ndx])
                     if not tpos:
                         continue
-                    nprop = prop * tpos * (4 - ndx) / n
+                    nprop = prop * tpos * ((len(state) - 1) - ndx) / n
                     nstate = tuple([x - (i == ndx) + (i == ndx+1) for x, i in zip(state, range(len(state)))])
                     if nstate not in fringe[n - 1]:
                         fringe[n - 1][nstate] = 0.
