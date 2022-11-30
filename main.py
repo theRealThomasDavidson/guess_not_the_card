@@ -107,7 +107,7 @@ class Memories(Strategy):
         """
         colors = sum(state)
         wins = 0.
-        n = sum([x * (4 - i) for x, i in zip(state, range(len(state)))])
+        n = sum([x * ((len(state)-1) - i) for x, i in zip(state, range(len(state)))])
         fringe = {n: {state: 1.}, }
         while fringe[n]:
             fringe[n - 1] = {}
@@ -181,14 +181,14 @@ def sim(strat, tries, batches):
 
 def main():
 
-    tries = 10000
-    batches = 4000
+    tries = 100
+    batches = 500
     for strat in [Memories, Random_guess, Say_what_you_see]:
         sim(strat, tries, batches)
         if strat == Say_what_you_see:
             continue
         now = time.time()
-        print("Exact answer calculated to be: {:3.6f}%".format(strat.solve() * 100))
+        print("Exact answer calculated to be: {:3.6f}%".format(strat.solve(state=(13, 0, 0, 0, 0)) * 100))
         print("Total time: {:6.3f}s".format(time.time()-now))
 
 
