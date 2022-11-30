@@ -69,7 +69,7 @@ class Random_guess(Strategy):
         :return: a float between 0. and 1. that gives the proportion of wins to games played.
         """
         colors = float(sum(state))
-        n = sum([x * (4 - i) for x, i in zip(state, range(len(state)))])
+        n = sum([x * ((len(state) - 1) - i) for x, i in zip(state, range(len(state)))])
         return ((colors - 1.) / colors) ** n
 
 
@@ -77,24 +77,24 @@ class Memories(Strategy):
 
     def __init__(self):
         self.seen = [set(range(13)), set(), set(), set(), set()]
-        self.seenidx = 0
+        self.seen_idx = 0
 
     def next_guess(self):
-        self.seenidx += bool(self.seen[self.seenidx + 1])
-        return random.choice(tuple(self.seen[self.seenidx]))
+        self.seen_idx += bool(self.seen[self.seen_idx + 1])
+        return random.choice(tuple(self.seen[self.seen_idx]))
 
     def response(self, card):
         if not isinstance(card, (int,)):
             raise TypeError("U R SO DUMB")
 
-        for ndx in range(self.seenidx + 1):
+        for ndx in range(self.seen_idx + 1):
             if card in self.seen[ndx]:
                 self.seen[ndx].remove(card)
                 self.seen[ndx + 1].add(card)
                 return
 
     def solved(self):
-        return bool(self.seen[4])
+        return bool(self.seen[-1])
 
     @classmethod
     def solve(cls, state=(13, 0, 0, 0, 0)):
